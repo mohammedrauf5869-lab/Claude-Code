@@ -1,18 +1,26 @@
 # Mohammed Rauf — Portfolio
 
-Single-page portfolio for Mohammed Rauf, Senior Project Planner and Primavera P6 specialist.
+Portfolio site for Mohammed Rauf, Senior Project Planner and Primavera P6 specialist, with a built-in control panel for editing it.
 
-Everything lives in `index.html`: no build step, no dependencies beyond Google Fonts.
+| File | What it does |
+|---|---|
+| `index.html` | The website. It builds every section from `content.js`. |
+| `content.js` | All the text, career data, section order and theme settings. |
+| `admin.html` | The control panel: edit everything with a live preview, then publish. |
 
-- **View locally:** open `index.html` in a browser.
-- **Publish:** enable GitHub Pages for this branch (Settings → Pages → Deploy from branch, root folder).
+There is no build step. Open `index.html` to view the site, or `admin.html` to edit it.
 
-## Design notes
+## Control panel (`admin.html`)
 
-The site is designed to look like a planning programme:
+- **Theme & colours:** six colour presets, full light and dark palette editors with contrast checks, font pairings, corner roundness, and toggles for grain, grid and animation.
+- **Sections & menu:** show, hide, rename and reorder sections, and choose which ones appear in the top menu.
+- **Content:** editors for the hero, stats, career timeline (Gantt roles, figures and achievements), assurance case study, risk chart, capabilities, milestones, credentials, contact details, and footer/SEO. Lists can be reordered by dragging or with the arrow buttons, and items can be duplicated or deleted.
+- **Live preview** in desktop, tablet and mobile sizes, in light or dark mode.
+- **Drafts** are saved automatically in your browser. Undo and redo work with Ctrl+Z and Ctrl+Shift+Z.
+- **Publish** (Ctrl+S) commits the new `content.js` to GitHub using a fine-grained personal access token. The token needs access to this repository only, with *Contents: read and write*. You can also download `content.js` and upload it yourself.
 
-- **Hero:** an activity-on-node network whose critical path draws itself in.
-- **2.0 Programme:** the career as an interactive Gantt chart, with baseline bars, critical activities, a live data-date line and a forecast bar. Click a row to expand it.
-- **3.0 Assurance:** the 22,030-activity forensic review as a funnel, with the findings mapped onto a DCMA 14-point grid.
-- **4.0 Risk:** an illustrative QSRA Monte Carlo chart (histogram and S-curve). Drag across it to read the confidence for any finish date.
-- Light and dark themes, a reduced-motion fallback, and a responsive layout down to 360px.
+Text fields support light markup: `*accent colour*`, `_italic serif_`, `**bold**`, and new lines.
+
+## Hosting
+
+Turn on GitHub Pages for the branch you publish to (Settings → Pages → Deploy from branch, root folder). Then set that same branch under **Publishing** in the control panel. The live site updates about a minute after each publish.
