@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mohammed Rauf — Senior Project Planner</title>
+<meta name="description" content="Mohammed Rauf — Senior Project Planner, Primavera P6 specialist and project controls lead with 20+ years across energy transmission, infrastructure, rail, offshore and high-rise construction.">
+<meta name="theme-color" content="#f3efe6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23141414'/%3E%3Cpath d='M16 6l10 10-10 10L6 16z' fill='%23ff4d1f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f3efe6; --paper-2:#ebe5d8; --card:#faf7f0;
+  --ink:#141414; --ink-2:#3b3a36; --muted:#7a766c;
+  --line:rgba(20,20,20,.12); --line-2:rgba(20,20,20,.06);
+  --crit:#ff4d1f; --crit-soft:rgba(255,77,31,.14);
+  --plan:#1f6f66; --plan-soft:rgba(31,111,102,.14);
+  --base:#b9b1a0; --gold:#c89b3c;
+  --serif:"Instrument Serif", Georgia, serif;
+  --sans:"Inter Tight", system-ui, -apple-system, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, monospace;
+  --maxw:1240px; --gut:clamp(16px,4vw,48px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1113; --paper-2:#141a1d; --card:#161c1f;
+    --ink:#ece6d9; --ink-2:#c3bdb0; --muted:#8a8578;
+    --line:rgba(236,230,217,.13); --line-2:rgba(236,230,217,.06);
+    --crit:#ff6a3d; --crit-soft:rgba(255,106,61,.16);
+    --plan:#4fc1b0; --plan-soft:rgba(79,193,176,.15);
+    --base:#4a4d4c; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1113; --paper-2:#141a1d; --card:#161c1f;
+  --ink:#ece6d9; --ink-2:#c3bdb0; --muted:#8a8578;
+  --line:rgba(236,230,217,.13); --line-2:rgba(236,230,217,.06);
+  --crit:#ff6a3d; --crit-soft:rgba(255,106,61,.16);
+  --plan:#4fc1b0; --plan-soft:rgba(79,193,176,.15);
+  --base:#4a4d4c; color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;overflow-x:hidden;transition:background .5s,color .5s}
+::selection{background:var(--crit);color:#fff}
+a{color:inherit}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut)}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.serif{font-family:var(--serif);font-weight:400}
+em.i{font-family:var(--serif);font-style:italic;font-weight:400}
+
+/* background grid, like a schedule sheet */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(var(--line-2) 1px,transparent 1px),linear-gradient(90deg,var(--line-2) 1px,transparent 1px);
+  background-size:48px 48px;mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 80%)}
+main,header,footer{position:relative;z-index:1}
+
+/* grain */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* progress bar = % complete */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--crit);z-index:60;width:0;transform-origin:left}
+
+/* ---------- NAV ---------- */
+header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px);
+  background:color-mix(in srgb,var(--paper) 78%,transparent);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:60px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:600;letter-spacing:-.01em}
+.logo .dia{width:14px;height:14px;background:var(--crit);transform:rotate(45deg);border-radius:2px;transition:transform .6s cubic-bezier(.7,0,.2,1)}
+.logo:hover .dia{transform:rotate(225deg)}
+.nav ul{display:flex;list-style:none;gap:4px;margin-left:auto}
+.nav ul a{display:block;text-decoration:none;padding:6px 10px;border-radius:6px;color:var(--ink-2);font-size:14px;transition:background .2s,color .2s}
+.nav ul a span{font-family:var(--mono);font-size:10px;color:var(--muted);margin-right:6px}
+.nav ul a:hover,.nav ul a.on{background:var(--ink);color:var(--paper)}
+.nav ul a:hover span,.nav ul a.on span{color:var(--crit)}
+.datadate{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.datadate i{width:8px;height:8px;border-radius:50%;background:var(--plan);box-shadow:0 0 0 0 var(--plan);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--plan) 60%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+.theme{border:1px solid var(--line);background:transparent;color:var(--ink);width:36px;height:36px;border-radius:50%;cursor:pointer;display:grid;place-items:center;transition:transform .4s}
+.theme:hover{transform:rotate(180deg)}
+.theme svg{width:16px;height:16px}
+@media (max-width:980px){.nav ul{display:none}.datadate{margin-left:auto}}
+@media (max-width:420px){.datadate span{display:none}}
+
+/* ---------- HERO ---------- */
+.hero{min-height:calc(100svh - 60px);display:flex;flex-direction:column;justify-content:center;padding:56px 0 40px;position:relative}
+.hero-net{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
+.hero .wrap{position:relative;z-index:1;width:100%}
+.hero-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);margin-bottom:clamp(28px,5vw,56px)}
+.tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);padding:6px 12px;border-radius:999px;background:var(--card)}
+.tag b{width:6px;height:6px;background:var(--crit);transform:rotate(45deg)}
+h1.name{font-family:var(--serif);font-weight:400;font-size:clamp(64px,13.5vw,212px);line-height:.84;letter-spacing:-.035em}
+h1.name .row{display:block;overflow:hidden;padding-bottom:.04em}
+h1.name .row>span{display:inline-block;transform:translateY(105%);animation:rise 1.1s cubic-bezier(.2,.8,.1,1) forwards}
+h1.name .row:nth-child(2)>span{animation-delay:.12s}
+h1.name .it{font-style:italic;color:var(--crit)}
+@keyframes rise{to{transform:none}}
+.hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(24px,5vw,80px);margin-top:clamp(28px,4vw,48px);align-items:end}
+.lede{font-size:clamp(19px,1.9vw,24px);line-height:1.4;max-width:30ch;color:var(--ink-2);opacity:0;animation:fade 1s .6s forwards}
+.lede strong{color:var(--ink);font-weight:600}
+@keyframes fade{to{opacity:1}}
+.hero-card{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:18px 20px;opacity:0;animation:fade 1s .85s forwards;box-shadow:0 30px 60px -40px rgba(0,0,0,.35)}
+.hero-card .hd{display:flex;justify-content:space-between;color:var(--muted);padding-bottom:12px;border-bottom:1px dashed var(--line);margin-bottom:12px}
+.hero-card dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:14px}
+.hero-card dt{color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.hero-card dd{font-weight:500}
+.hero-card .live{color:var(--plan)}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;opacity:0;animation:fade 1s 1s forwards}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;border-radius:999px;padding:13px 22px;font-weight:600;font-size:15px;border:1px solid var(--ink);transition:transform .25s,background .25s,color .25s;position:relative;overflow:hidden}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.solid:hover{background:var(--crit);border-color:var(--crit);color:#fff}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+.btn svg{width:16px;height:16px;transition:transform .25s}
+.btn:hover svg{transform:translateX(3px)}
+.scrollcue{margin-top:clamp(32px,6vw,72px);display:flex;align-items:center;gap:12px;color:var(--muted)}
+.scrollcue .ln{flex:1;height:1px;background:var(--line);position:relative;overflow:hidden}
+.scrollcue .ln::after{content:"";position:absolute;inset:0;width:30%;background:var(--crit);animation:scan 2.4s ease-in-out infinite}
+@keyframes scan{0%{transform:translateX(-100%)}100%{transform:translateX(340%)}}
+@media (max-width:820px){.hero-grid{grid-template-columns:1fr}}
+@media (max-width:700px){.hero-net{opacity:.35}}
+
+/* ---------- MARQUEE ---------- */
+.marquee{border-block:1px solid var(--line);overflow:hidden;background:var(--ink);color:var(--paper);padding:16px 0}
+.marquee .track{display:flex;gap:48px;width:max-content;animation:mq 40s linear infinite}
+.marquee span{font-family:var(--serif);font-size:clamp(24px,3vw,36px);white-space:nowrap;display:flex;align-items:center;gap:48px}
+.marquee span::after{content:"";width:10px;height:10px;background:var(--crit);transform:rotate(45deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- SECTIONS ---------- */
+section{padding:clamp(80px,11vw,150px) 0;position:relative}
+.sec-head{display:grid;grid-template-columns:180px 1fr;gap:24px;margin-bottom:clamp(40px,6vw,72px);align-items:start}
+.wbs{color:var(--muted);display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:2px solid var(--ink)}
+.wbs b{color:var(--crit);font-weight:500}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6.5vw,96px);line-height:.95;letter-spacing:-.025em}
+h2 em{color:var(--crit)}
+.sec-sub{margin-top:18px;max-width:58ch;color:var(--ink-2);font-size:18px}
+@media (max-width:720px){.sec-head{grid-template-columns:1fr;gap:16px}.wbs{flex-direction:row;justify-content:space-between}}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.8,.1,1),transform .9s cubic-bezier(.2,.8,.1,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- STATS ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.stat{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 24px 24px;position:relative;overflow:hidden;min-height:210px;display:flex;flex-direction:column;justify-content:space-between;transition:background .35s}
+.stat:hover{background:var(--card)}
+.stat .n{font-family:var(--serif);font-size:clamp(56px,6.5vw,92px);line-height:1;letter-spacing:-.03em}
+.stat .n sup{font-size:.45em;vertical-align:.9em;color:var(--crit);margin-left:2px}
+.stat .n .pre{font-size:.6em;vertical-align:.35em;margin-right:2px;color:var(--muted)}
+.stat p{color:var(--ink-2);font-size:15px;max-width:26ch}
+.stat .mono{color:var(--muted)}
+.stat .sbar{position:absolute;left:0;bottom:0;height:3px;background:var(--crit);width:0;transition:width 1.6s cubic-bezier(.2,.8,.1,1)}
+.stat.in .sbar{width:100%}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.stat{padding:20px 16px;min-height:170px}}
+
+/* profile */
+.profile{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);margin-top:clamp(56px,8vw,110px)}
+.profile .big{font-family:var(--serif);font-size:clamp(28px,3.2vw,44px);line-height:1.12;letter-spacing:-.01em}
+.profile .big em{color:var(--crit)}
+.profile .txt p{color:var(--ink-2);margin-bottom:16px}
+.creds{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.creds span{border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:13px;background:var(--card)}
+@media (max-width:820px){.profile{grid-template-columns:1fr}}
+
+/* ---------- GANTT ---------- */
+.gantt{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden;box-shadow:0 40px 80px -60px rgba(0,0,0,.5)}
+.g-toolbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--paper-2)}
+.g-toolbar .dots{display:flex;gap:6px}
+.g-toolbar .dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.g-toolbar .ttl{font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.legend{display:flex;gap:16px;margin-left:auto;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.legend .sw{width:18px;height:8px;border-radius:2px}
+.g-body{display:grid;grid-template-columns:minmax(220px,300px) 1fr}
+.g-head,.g-row{display:contents}
+.g-cell{border-bottom:1px solid var(--line-2);min-height:62px}
+.g-name{padding:12px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;cursor:pointer;transition:background .2s}
+.g-name .id{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em}
+.g-name .r{font-weight:600;font-size:14.5px;line-height:1.25}
+.g-name .c{font-size:13px;color:var(--ink-2)}
+.g-track{position:relative;cursor:pointer}
+.g-row:hover .g-cell,.g-row.open .g-cell{background:color-mix(in srgb,var(--crit) 5%,transparent)}
+.g-scale{position:relative;height:40px;border-bottom:1px solid var(--line)}
+.g-scale .yr{position:absolute;top:0;bottom:0;border-left:1px solid var(--line-2);font-family:var(--mono);font-size:10px;color:var(--muted);padding:12px 0 0 4px}
+.g-hname{border-right:1px solid var(--line);border-bottom:1px solid var(--line);height:40px;padding:12px 18px;font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.g-grid{position:absolute;inset:0;pointer-events:none}
+.g-grid i{position:absolute;top:0;bottom:0;border-left:1px dashed var(--line-2)}
+.bar{position:absolute;top:50%;height:16px;margin-top:-8px;border-radius:3px;transform-origin:left;transform:scaleX(0);transition:transform 1.2s cubic-bezier(.2,.8,.1,1)}
+.gantt.in .bar{transform:scaleX(1)}
+.bar.base{height:5px;margin-top:10px;background:var(--base);border-radius:2px;opacity:.8}
+.bar.plan{background:var(--plan)}
+.bar.crit{background:var(--crit)}
+.bar.plan,.bar.crit{background-image:repeating-linear-gradient(-45deg,transparent 0 6px,rgba(255,255,255,.14) 6px 12px)}
+.bar .lbl{position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);white-space:nowrap;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);opacity:0;transition:opacity .5s 1s}
+.gantt.in .bar .lbl{opacity:1}
+.bar.flip .lbl{left:auto;right:calc(100% + 8px)}
+.ms{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;background:var(--ink);transform:rotate(45deg) scale(0);transition:transform .5s 1.2s cubic-bezier(.3,1.6,.5,1)}
+.gantt.in .ms{transform:rotate(45deg) scale(1)}
+.ddline{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--crit);z-index:3;pointer-events:none}
+.ddline{border-left-width:1.5px;opacity:.8}
+.ddline.lab{opacity:1}
+.ddline:not(.lab)::before{display:none}
+.bar.fcst{background:transparent;border:1.5px dashed var(--crit);height:16px}
+.bar.fcst .lbl{left:auto;right:calc(100% + 16px);color:var(--crit);opacity:0}
+.gantt.in .bar.fcst .lbl{opacity:1}
+.ms.fin{background:var(--crit)}
+.ddline::before{content:"DATA DATE";position:absolute;top:6px;left:-1px;transform:translateX(-100%);background:var(--crit);color:#fff;font-family:var(--mono);font-size:9px;padding:2px 6px;letter-spacing:.08em;border-radius:3px 0 0 3px}
+.g-detail{grid-column:1/-1;display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.2,.8,.1,1);border-bottom:1px solid var(--line-2)}
+.g-detail>div{overflow:hidden}
+.g-row.open+.g-detail{grid-template-rows:1fr}
+.g-detail .inner{padding:22px 24px 26px;display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:32px;background:var(--paper-2)}
+.g-detail ul{list-style:none;display:grid;gap:10px}
+.g-detail li{position:relative;padding-left:22px;color:var(--ink-2);font-size:15px}
+.g-detail li::before{content:"";position:absolute;left:2px;top:.55em;width:7px;height:7px;background:var(--crit);transform:rotate(45deg)}
+.g-detail aside{border-left:1px dashed var(--line);padding-left:20px;display:grid;gap:12px;align-content:start}
+.g-detail aside div{display:flex;flex-direction:column}
+.g-detail aside .v{font-family:var(--serif);font-size:30px;line-height:1}
+.g-detail aside .k{font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em}
+.g-tip{position:fixed;pointer-events:none;z-index:80;background:var(--ink);color:var(--paper);padding:10px 12px;border-radius:8px;font-size:12px;font-family:var(--mono);opacity:0;transform:translateY(6px);transition:opacity .15s,transform .15s;max-width:280px}
+.g-tip.on{opacity:1;transform:none}
+.g-tip b{color:var(--crit);font-weight:500}
+.g-hint{padding:12px 18px;font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media (max-width:820px){
+  .g-body{grid-template-columns:1fr}
+  .g-hname{display:none}
+  .g-name{border-right:none;border-bottom:none;min-height:auto;padding:14px 16px 4px}
+  .g-track{min-height:40px}
+  .g-scale{display:none}
+  .g-detail .inner{grid-template-columns:1fr;padding:18px 16px}
+  .g-detail aside{border-left:none;padding-left:0;border-top:1px dashed var(--line);padding-top:14px;grid-template-columns:repeat(3,1fr)}
+  .bar .lbl{display:none}
+  .ddline::before{content:"NOW"}
+  .bar.fcst .lbl{display:block;font-size:9.5px}
+}
+
+/* ---------- CASE STUDY ---------- */
+.case{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);align-items:start}
+.funnel{display:grid;gap:10px}
+.fstep{display:grid;grid-template-columns:clamp(96px,14vw,190px) 1fr;gap:20px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--card);position:relative;overflow:hidden}
+.fstep .n{font-family:var(--serif);font-size:clamp(44px,5vw,68px);line-height:1;letter-spacing:-.02em;}
+.fstep .t b{display:block;font-weight:600}
+.fstep .t span{color:var(--ink-2);font-size:14.5px}
+.fstep .fill{position:absolute;left:0;top:0;bottom:0;background:var(--crit-soft);width:0;transition:width 1.4s cubic-bezier(.2,.8,.1,1);z-index:0}
+.fstep>*{position:relative;z-index:1}
+.fstep.in .fill{width:var(--w)}
+.issues{border:1px solid var(--line);border-radius:14px;background:var(--ink);color:var(--paper);padding:24px;position:sticky;top:90px}
+.issues h3{font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.05;margin-bottom:4px}
+.issues .mono{color:color-mix(in srgb,var(--paper) 55%,transparent)}
+.dcma{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:22px 0}
+.dcma div{aspect-ratio:1;border-radius:6px;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;font-family:var(--mono);font-size:11px;position:relative;transition:background .4s,border-color .4s,transform .4s;cursor:default}
+.dcma div.pass{background:rgba(79,193,176,.18);border-color:rgba(79,193,176,.5)}
+.dcma div.fail{background:rgba(255,106,61,.25);border-color:#ff6a3d}
+.dcma div:hover{transform:translateY(-3px)}
+.dcma-legend{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:color-mix(in srgb,var(--paper) 65%,transparent);min-height:34px;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+.dcma-legend b{color:var(--paper);font-weight:500}
+.found{list-style:none;display:grid;gap:10px;margin-top:18px}
+.found li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:color-mix(in srgb,var(--paper) 85%,transparent)}
+.found li i{flex:none;width:22px;height:22px;border-radius:50%;background:rgba(255,106,61,.2);color:#ff6a3d;display:grid;place-items:center;font-style:normal;font-family:var(--mono);font-size:11px;margin-top:1px}
+@media (max-width:900px){.case{grid-template-columns:1fr}.issues{position:relative;top:0}}
+@media (max-width:420px){.dcma{gap:4px}.dcma div{font-size:9px}}
+
+/* ---------- QSRA ---------- */
+.qsra{display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(24px,4vw,48px);align-items:stretch}
+.chart{border:1px solid var(--line);border-radius:16px;background:var(--card);padding:20px 20px 12px;position:relative}
+.chart svg{width:100%;height:auto;display:block;overflow:visible;touch-action:pan-y}
+.chart .ax{stroke:var(--line);stroke-width:1}
+.chart .axl{fill:var(--muted);font-family:var(--mono);font-size:10px}
+.chart .hist rect{fill:var(--plan-soft);stroke:var(--plan);stroke-width:.6}
+.chart .cdf{fill:none;stroke:var(--ink);stroke-width:2.5;stroke-linecap:round}
+.chart .pline{stroke-dasharray:3 4;stroke-width:1.2}
+.chart .plbl{font-family:var(--mono);font-size:11px;font-weight:700;paint-order:stroke;stroke:var(--card);stroke-width:5px;stroke-linejoin:round}
+.chart .cursor line{stroke:var(--crit);stroke-width:1.5}
+.chart .cursor circle{fill:var(--crit);stroke:var(--card);stroke-width:3}
+.chart-read{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:1px dashed var(--line);margin-top:8px;padding-top:12px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.chart-read b{color:var(--ink);font-weight:500}
+.qsra-side{display:grid;gap:12px;align-content:start}
+.pcard{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--card);display:grid;grid-template-columns:auto 1fr;gap:4px 18px;align-items:center;cursor:pointer;transition:border-color .25s,transform .25s}
+.pcard:hover,.pcard.on{border-color:var(--ink);transform:translateX(4px)}
+.pcard .p{font-family:var(--serif);font-size:44px;line-height:1;grid-row:span 2}
+.pcard b{font-weight:600}
+.pcard span{color:var(--ink-2);font-size:14px}
+.pcard[data-p="50"] .p{color:var(--plan)}
+.pcard[data-p="80"] .p{color:var(--gold)}
+.pcard[data-p="90"] .p{color:var(--crit)}
+.note{font-size:13px;color:var(--muted);font-style:italic}
+@media (max-width:900px){.qsra{grid-template-columns:1fr}}
+
+/* ---------- COMPETENCIES ---------- */
+.comp{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+.ccard{grid-column:span 2;border:1px solid var(--line);border-radius:16px;padding:26px 24px 24px;background:var(--card);position:relative;overflow:hidden;min-height:280px;display:flex;flex-direction:column;transition:transform .5s cubic-bezier(.2,.8,.1,1),border-color .3s}
+.ccard:nth-child(4),.ccard:nth-child(5){grid-column:span 3}
+.ccard:hover{transform:translateY(-6px);border-color:var(--ink)}
+.ccard .ic{width:44px;height:44px;border-radius:10px;background:var(--ink);color:var(--paper);display:grid;place-items:center;margin-bottom:auto}
+.ccard .ic svg{width:22px;height:22px}
+.ccard h3{font-family:var(--serif);font-weight:400;font-size:34px;line-height:1;margin:32px 0 12px}
+.ccard p{color:var(--ink-2);font-size:15px}
+.ccard .num{position:absolute;top:22px;right:22px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.ccard::after{content:"";position:absolute;right:-60px;bottom:-60px;width:160px;height:160px;border:1px solid var(--line);transform:rotate(45deg);transition:transform .8s cubic-bezier(.2,.8,.1,1),border-color .4s}
+.ccard:hover::after{transform:rotate(135deg);border-color:var(--crit)}
+@media (max-width:980px){.comp{grid-template-columns:1fr 1fr}.ccard,.ccard:nth-child(4),.ccard:nth-child(5){grid-column:span 1}.ccard:nth-child(5){grid-column:span 2}}
+@media (max-width:600px){.comp{grid-template-columns:1fr}.ccard,.ccard:nth-child(5){grid-column:span 1;min-height:0}}
+
+/* ---------- MILESTONES ---------- */
+.miles{list-style:none;border-top:1px solid var(--line)}
+.miles li{display:grid;grid-template-columns:90px 40px 1fr auto;gap:20px;align-items:center;padding:26px 0;border-bottom:1px solid var(--line);position:relative;transition:padding .4s cubic-bezier(.2,.8,.1,1)}
+.miles li::before{content:"";position:absolute;left:0;right:0;top:0;bottom:0;background:var(--ink);transform:scaleY(0);transform-origin:bottom;transition:transform .45s cubic-bezier(.2,.8,.1,1);z-index:-1}
+.miles li:hover{padding-left:20px;padding-right:20px;color:var(--paper)}
+.miles li:hover::before{transform:scaleY(1)}
+.miles .k{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.miles .d{width:18px;height:18px;background:var(--crit);transform:rotate(45deg);transition:transform .5s}
+.miles li:hover .d{transform:rotate(225deg)}
+.miles .t{font-family:var(--serif);font-size:clamp(22px,2.6vw,34px);line-height:1.12}
+.miles .v{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right;white-space:nowrap}
+.miles li:hover .k,.miles li:hover .v{color:color-mix(in srgb,var(--paper) 60%,transparent)}
+@media (max-width:720px){.miles li{grid-template-columns:30px 1fr;gap:6px 14px}.miles .k{grid-column:2;order:-1}.miles .d{grid-row:span 3;align-self:start;margin-top:26px;width:12px;height:12px}.miles .v{text-align:left;grid-column:2}.miles li:hover{padding-left:12px;padding-right:12px}}
+
+/* ---------- CREDENTIALS ---------- */
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px)}
+.cred-list{list-style:none;display:grid}
+.cred-list li{display:grid;grid-template-columns:64px 1fr;gap:18px;padding:18px 0;border-bottom:1px dashed var(--line);align-items:baseline}
+.cred-list .y{font-family:var(--mono);font-size:13px;color:var(--crit)}
+.cred-list b{font-weight:600;display:block}
+.cred-list span{color:var(--ink-2);font-size:14.5px}
+h3.sm{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:400;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+.sys{display:grid;gap:18px;margin-top:22px}
+.sys .row{display:grid;grid-template-columns:1fr auto;gap:6px 12px}
+.sys .row b{font-weight:600;font-size:15px}
+.sys .row span{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase}
+.sys .meter{grid-column:1/-1;height:8px;border-radius:99px;background:var(--line-2);overflow:hidden;display:grid;grid-template-columns:repeat(10,1fr);gap:2px}
+.sys .meter i{background:var(--line);transition:background .4s}
+.sys.in .meter i.on{background:var(--ink)}
+.sys.in .row:first-child .meter i.on{background:var(--crit)}
+.sectors{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.sectors span{border:1px solid var(--ink);padding:8px 14px;border-radius:999px;font-size:14px;transition:background .25s,color .25s}
+.sectors span:hover{background:var(--crit);border-color:var(--crit);color:#fff}
+@media (max-width:820px){.cred-grid{grid-template-columns:1fr}}
+
+/* ---------- CONTACT ---------- */
+.contact{background:var(--ink);color:var(--paper);border-radius:28px;padding:clamp(40px,7vw,96px) clamp(24px,5vw,72px);position:relative;overflow:hidden}
+.contact::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:40px 40px;mask-image:linear-gradient(to left,#000,transparent 70%)}
+.contact>*{position:relative}
+.contact .mono{color:color-mix(in srgb,var(--paper) 55%,transparent)}
+.contact h2{font-size:clamp(48px,8vw,128px);margin:18px 0 28px;color:var(--paper)}
+.contact h2 em{color:var(--crit)}
+.contact .row{display:flex;flex-wrap:wrap;gap:12px}
+.contact .btn{border-color:rgba(255,255,255,.3);color:var(--paper)}
+.contact .btn.solid{background:var(--crit);border-color:var(--crit);color:#fff}
+.contact .btn.solid:hover{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.contact .btn.ghost:hover{background:var(--paper);color:var(--ink)}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:clamp(40px,6vw,72px);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:14px;overflow:hidden}
+.facts div{background:var(--ink);padding:18px 20px}
+.facts .k{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:color-mix(in srgb,var(--paper) 50%,transparent)}
+.facts .v{font-size:16px;font-weight:500;margin-top:4px}
+.contact .bigdia{position:absolute;right:-8%;top:-20%;width:min(520px,60vw);aspect-ratio:1;border:1px solid rgba(255,255,255,.12);transform:rotate(45deg);animation:spin 60s linear infinite}
+.contact .bigdia::after{content:"";position:absolute;inset:18%;border:1px solid rgba(255,106,61,.5)}
+@keyframes spin{to{transform:rotate(405deg)}}
+.copy-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--crit);color:#fff;padding:10px 16px;border-radius:999px;font-family:var(--mono);font-size:12px;opacity:0;transition:.3s;z-index:90;pointer-events:none}
+.copy-toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:820px){.facts{grid-template-columns:1fr 1fr}}
+
+footer{padding:36px 0 48px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#top" class="logo"><span class="dia"></span>M. Rauf</a>
+    <ul id="navlist">
+      <li><a href="#profile"><span>1.0</span>Profile</a></li>
+      <li><a href="#programme"><span>2.0</span>Programme</a></li>
+      <li><a href="#forensic"><span>3.0</span>Assurance</a></li>
+      <li><a href="#risk"><span>4.0</span>Risk</a></li>
+      <li><a href="#capability"><span>5.0</span>Capability</a></li>
+      <li><a href="#contact"><span>6.0</span>Contact</a></li>
+    </ul>
+    <div class="datadate mono"><i></i><span>Data date&nbsp;</span><b id="dd">—</b></div>
+    <button class="theme" id="theme" aria-label="Toggle colour theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+<!-- ============ HERO ============ -->
+<section class="hero" style="padding-top:0;padding-bottom:0">
+  <svg class="hero-net" id="net" aria-hidden="true"></svg>
+  <div class="wrap">
+    <div class="hero-top mono">
+      <span class="tag"><b></b>Senior Project Planner · Project Controls</span>
+      <span class="tag">Cumbernauld, Scotland — 55.94°N 3.99°W</span>
+    </div>
+    <h1 class="name"><span class="row"><span>Mohammed</span></span><span class="row"><span class="it">Rauf.</span></span></h1>
+    <div class="hero-grid">
+      <div>
+        <p class="lede">Twenty years turning <strong>£300M programmes</strong> into schedules people can actually <em class="i">trust</em> — and decisions leadership can actually make.</p>
+        <div class="hero-cta">
+          <a class="btn solid" href="#programme">View the programme <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="hd mono"><span>Activity · A1000</span><span class="live">● In progress</span></div>
+        <dl>
+          <dt>Role</dt><dd>Senior Project Planner, Balfour Beatty</dd>
+          <dt>Project</dt><dd>Skye Reinforcement OHL &amp; UGC (£300M+)</dd>
+          <dt>Tooling</dt><dd>Primavera P6 · Acumen Fuse · QSRA</dd>
+          <dt>Contract</dt><dd>NEC4 ECC — Clause 31 / 32</dd>
+          <dt>Total float</dt><dd style="color:var(--crit)">0d — on the critical path</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="scrollcue mono"><span>Scroll</span><span class="ln"></span><span>Energy · Rail · Offshore · High-rise</span></div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mq">
+  <span>Primavera P6</span><span><em class="i">NEC4 ECC</em></span><span>QSRA P50 / P80 / P90</span><span><em class="i">DCMA 14-point</em></span><span>Critical path</span><span><em class="i">Earned Value</em></span><span>Time Impact Analysis</span><span><em class="i">Basis of Schedule</em></span>
+</div></div>
+
+<!-- ============ PROFILE ============ -->
+<section id="profile">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="wbs mono"><b>WBS 1.0</b><span>Profile</span></div>
+      <div>
+        <h2>Schedules that tell<br>the <em>truth</em>, early.</h2>
+      </div>
+    </div>
+
+    <div class="stats" id="stats">
+      <div class="stat reveal"><span class="mono">Experience</span><div class="n"><span data-count="20">0</span><sup>+</sup></div><p>Years in planning and project controls across five sectors.</p><i class="sbar"></i></div>
+      <div class="stat reveal"><span class="mono">Current scheme</span><div class="n"><span class="pre">£</span><span data-count="300">0</span><sup>M+</sup></div><p>Skye Reinforcement OHL &amp; UGC — lead planner.</p><i class="sbar"></i></div>
+      <div class="stat reveal"><span class="mono">Concurrent control</span><div class="n"><span data-count="6">0</span><sup>proj</sup></div><p>High-rise and infrastructure projects run in parallel in the UAE (~£120M).</p><i class="sbar"></i></div>
+      <div class="stat reveal"><span class="mono">Early warning</span><div class="n"><span data-count="4">0</span><sup>wks</sup></div><p>Earlier issue detection from weekly schedule health checks.</p><i class="sbar"></i></div>
+    </div>
+
+    <div class="profile">
+      <p class="big reveal">An expert <em>Primavera P6</em> practitioner who builds and controls integrated L1–L4 schedules from <em class="i">tender through delivery</em> — then turns the data into clear decisions.</p>
+      <div class="txt reveal">
+        <p>Senior Project Planner with 20+ years across energy transmission, infrastructure, rail, offshore oil and gas and high-rise construction — including five years in the UAE controlling six concurrent projects worth ~£120M.</p>
+        <p>Strong in NEC4 ECC programme compliance, critical path management, quantitative schedule risk analysis, DCMA 14-point assurance and delay impact assessment. Known for raising planning standards across teams, and for mentoring the next generation of planners.</p>
+        <div class="creds"><span>PRINCE2 Practitioner</span><span>APMG PP&amp;C Practitioner</span><span>P6 EPPM Advanced</span><span>PMI EVMS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROGRAMME / GANTT ============ -->
+<section id="programme" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="wbs mono"><b>WBS 2.0</b><span>Programme</span></div>
+      <div>
+        <h2>A career, <em>baselined.</em></h2>
+        <p class="sec-sub">Rendered the only way a planner would: as a programme. Bars are roles, the orange ones sit on today's critical path. Click any activity to open its detail.</p>
+      </div>
+    </div>
+
+    <div class="gantt reveal" id="gantt">
+      <div class="g-toolbar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="ttl">MR-CAREER-L2 · Rev C26 · 2000 → 2028</span>
+        <div class="legend">
+          <span><i class="sw" style="background:var(--crit)"></i>Critical</span>
+          <span><i class="sw" style="background:var(--plan)"></i>Completed</span>
+          <span><i class="sw" style="background:var(--base);height:4px"></i>Baseline</span>
+          <span><i class="sw" style="background:var(--ink);width:8px;height:8px;transform:rotate(45deg)"></i>Milestone</span>
+        </div>
+      </div>
+      <div class="g-body" id="gbody"></div>
+      <div class="g-hint"><span>↳ Tap an activity to expand</span><span>Earlier: Mechanical Design Engineer, A.J. Cruickshanks (1997–2000)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FORENSIC CASE ============ -->
+<section id="forensic" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="wbs mono"><b>WBS 3.0</b><span>Assurance</span></div>
+      <div>
+        <h2>22,030 activities.<br><em>One honest picture.</em></h2>
+        <p class="sec-sub">Case study — forensic review of a live overhead line programme at Balfour Beatty. The schedule looked healthy. It wasn't.</p>
+      </div>
+    </div>
+
+    <div class="case">
+      <div class="funnel">
+        <div class="fstep reveal" style="--w:100%"><i class="fill"></i><div class="n" data-count="22030" data-sep>0</div><div class="t"><b>Activities interrogated</b><span>Logic, constraints, calendars and float traced across the full OHL programme.</span></div></div>
+        <div class="fstep reveal" style="--w:62%"><i class="fill"></i><div class="n" data-count="18">0</div><div class="t"><b>Tab analytics dashboard</b><span>Every finding made visible — from dangling logic to float erosion.</span></div></div>
+        <div class="fstep reveal" style="--w:44%"><i class="fill"></i><div class="n" data-count="28">0</div><div class="t"><b>Page assurance report</b><span>Evidence-led, written for decision-makers, not just planners.</span></div></div>
+        <div class="fstep reveal" style="--w:30%"><i class="fill"></i><div class="n" data-count="34">0</div><div class="t"><b>Action remediation plan</b><span>Phased, owned and sequenced so the fix doesn't break delivery.</span></div></div>
+      </div>
+
+      <div class="issues reveal">
+        <span class="mono">Findings mapped to DCMA 14-point</span>
+        <h3>Health check, visualised.</h3>
+        <div class="dcma" id="dcma"></div>
+        <div class="dcma-legend" id="dcmaLegend"><span>Hover a check</span><span><b id="dcmaScore">—</b></span></div>
+        <ul class="found">
+          <li><i>01</i>Negative float hiding on contractual milestones</li>
+          <li><i>02</i>Mandatory constraints masking true float</li>
+          <li><i>03</i>Dangling logic breaking the critical path</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QSRA ============ -->
+<section id="risk" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="wbs mono"><b>WBS 4.0</b><span>Risk</span></div>
+      <div>
+        <h2>Not a date.<br>A <em>distribution.</em></h2>
+        <p class="sec-sub">Quantitative schedule risk analysis turns "when will it finish?" into "how confident are we?". Drag across the curve to read the confidence of any finish date.</p>
+      </div>
+    </div>
+
+    <div class="qsra">
+      <div class="chart reveal">
+        <svg id="qsra" viewBox="0 0 640 360" role="img" aria-label="Illustrative QSRA cumulative probability curve with P50, P80 and P90 markers"></svg>
+        <div class="chart-read"><span>Finish: <b id="rdDate">—</b></span><span>Confidence: <b id="rdP">—</b></span><span>vs deterministic: <b id="rdD">—</b></span></div>
+      </div>
+      <div class="qsra-side">
+        <div class="pcard reveal" data-p="50"><div class="p">P50</div><b>The coin toss</b><span>Half of simulated outcomes finish by here.</span></div>
+        <div class="pcard reveal" data-p="80"><div class="p">P80</div><b>The commitment</b><span>Where time risk allowance usually lands.</span></div>
+        <div class="pcard reveal" data-p="90"><div class="p">P90</div><b>The board number</b><span>High confidence — for funding and contract dates.</span></div>
+        <p class="note reveal">Illustrative Monte Carlo output. Real QSRA work presented P50 / P80 / P90 risk outputs for UGC milestones to project and client stakeholders.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CAPABILITY ============ -->
+<section id="capability" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="wbs mono"><b>WBS 5.0</b><span>Capability</span></div>
+      <div><h2>Five disciplines,<br><em>one</em> integrated plan.</h2></div>
+    </div>
+
+    <div class="comp">
+      <article class="ccard reveal"><span class="num">5.1</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h8M7 12h10M11 18h10"/></svg></div><h3>Planning &amp; Scheduling</h3><p>P6 master schedules, WBS, logic, calendars and baselines. Integrated L1–L4 programmes, tender programmes, Basis of Schedule, lookahead and recovery planning.</p></article>
+      <article class="ccard reveal"><span class="num">5.2</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/></svg></div><h3>Contract &amp; Change</h3><p>NEC4 ECC Clause 31 / 32 programmes, early warnings, compensation event support, Time Impact Analysis and delay impact assessment.</p></article>
+      <article class="ccard reveal"><span class="num">5.3</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20c4 0 5-14 9-14s5 14 9 14"/></svg></div><h3>Risk &amp; Assurance</h3><p>QSRA at P50 / P80 / P90, time risk allowance, DCMA 14-point assessment, Deltek Acumen Fuse, what-if and scenario analysis.</p></article>
+      <article class="ccard reveal"><span class="num">5.4</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M6 16l4-5 3 3 5-7"/></svg></div><h3>Controls &amp; Reporting</h3><p>Earned Value, progress measurement, variance and trend analysis, forecasting, S-curves, dashboards and executive reporting packs.</p></article>
+      <article class="ccard reveal"><span class="num">5.5</span><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5M16 5a3 3 0 0 1 0 6M18 15c2 .6 3 2.4 3 5"/></svg></div><h3>Leadership</h3><p>Planning governance, template standardisation, mentoring, and coordinating clients and multiple stakeholders around a single source of truth.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MILESTONES ============ -->
+<section id="milestones" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="wbs mono"><b>WBS 5.6</b><span>Key milestones</span></div>
+      <div><h2>Milestones <em>achieved.</em></h2></div>
+    </div>
+    <ul class="miles">
+      <li class="reveal"><span class="k">MS-01</span><i class="d"></i><span class="t">NEC4 Clause 31 tender programme for Part B (Construction) of the Skye Reinforcement scheme</span><span class="v">£300M+</span></li>
+      <li class="reveal"><span class="k">MS-02</span><i class="d"></i><span class="t">Forensic review of a live OHL programme, with a phased remediation plan</span><span class="v">34 actions</span></li>
+      <li class="reveal"><span class="k">MS-03</span><i class="d"></i><span class="t">Tender programme and planning narrative across three SPEN overhead line routes</span><span class="v">£300M</span></li>
+      <li class="reveal"><span class="k">MS-04</span><i class="d"></i><span class="t">Weekly schedule health checks across six concurrent UAE projects</span><span class="v">3–4 wks earlier</span></li>
+      <li class="reveal"><span class="k">MS-05</span><i class="d"></i><span class="t">Mentored five junior planners — three promoted to mid-level within 18 months</span><span class="v">3 / 5</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CREDENTIALS ============ -->
+<section id="credentials" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="wbs mono"><b>WBS 5.7</b><span>Credentials</span></div>
+      <div><h2>Certified. <em class="i">Tooled.</em></h2></div>
+    </div>
+    <div class="cred-grid">
+      <div class="reveal">
+        <h3 class="sm">Certifications &amp; education</h3>
+        <ul class="cred-list">
+          <li><span class="y">2023</span><div><b>Project Planning &amp; Control Practitioner</b><span>APMG International</span></div></li>
+          <li><span class="y">2023</span><div><b>PRINCE2 Foundation &amp; Practitioner</b><span>PeopleCert</span></div></li>
+          <li><span class="y">2022</span><div><b>Earned Value Management Systems</b><span>PMI</span></div></li>
+          <li><span class="y">2021</span><div><b>Advanced Risk Management</b><span>APM</span></div></li>
+          <li><span class="y">2020</span><div><b>Oracle Primavera P6 EPPM Advanced</b><span>Oracle University</span></div></li>
+          <li><span class="y">2019</span><div><b>Schedule Optimisation Techniques</b><span>Planning Planet</span></div></li>
+          <li><span class="y">1997</span><div><b>PGDip, Maintenance Systems &amp; Project Management</b><span>Glasgow Caledonian University</span></div></li>
+          <li><span class="y">1994</span><div><b>BSc, Computer Aided Engineering</b><span>Glasgow Caledonian University</span></div></li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <h3 class="sm">Systems</h3>
+        <div class="sys" id="sys">
+          <div class="row"><b>Primavera P6</b><span>Expert</span><div class="meter" data-v="10"></div></div>
+          <div class="row"><b>Microsoft Project</b><span>Advanced</span><div class="meter" data-v="8"></div></div>
+          <div class="row"><b>Deltek Acumen Fuse</b><span>Advanced</span><div class="meter" data-v="8"></div></div>
+          <div class="row"><b>Excel · PowerPoint · Word</b><span>Advanced</span><div class="meter" data-v="8"></div></div>
+          <div class="row"><b>AutoCAD</b><span>Proficient</span><div class="meter" data-v="6"></div></div>
+          <div class="row"><b>SAP ERP</b><span>Exposure</span><div class="meter" data-v="3"></div></div>
+        </div>
+        <h3 class="sm" style="margin-top:48px">Sectors delivered</h3>
+        <div class="sectors">
+          <span>Energy transmission</span><span>Overhead lines &amp; UGC</span><span>Rail</span><span>Offshore oil &amp; gas</span><span>High-rise construction</span><span>Infrastructure</span><span>Energy infrastructure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" style="padding-top:0">
+  <div class="wrap">
+    <div class="contact reveal">
+      <i class="bigdia" aria-hidden="true"></i>
+      <span class="mono">WBS 6.0 · Next milestone</span>
+      <h2>Let's plan <em>what's next.</em></h2>
+      <div class="row">
+        <a class="btn solid" href="mailto:rauf69@gmail.com" id="mail">rauf69@gmail.com <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn ghost" href="https://linkedin.com/in/mohammed-rauf" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+      <div class="facts">
+        <div><div class="k">Based</div><div class="v">Cumbernauld, Scotland</div></div>
+        <div><div class="k">Notice period</div><div class="v">2 months</div></div>
+        <div><div class="k">Relocation</div><div class="v">Open to the UAE</div></div>
+        <div><div class="k">Work mode</div><div class="v">Office or site-based</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap mono"><span>© <span id="yr"></span> Mohammed Rauf</span><span>References available on request</span><span>Built like a programme — logic-linked, no dangling ends.</span></div></footer>
+<div class="g-tip" id="tip"></div>
+<div class="copy-toast" id="toast">Email copied</div>
+
+<script>
+(() => {
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS = 'http://www.w3.org/2000/svg';
+const el = (t, a={}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+
+/* ---------- theme ---------- */
+const root = document.documentElement;
+try { const t = localStorage.getItem('mr-theme'); if (t) root.dataset.theme = t; } catch(e){}
+$('#theme').addEventListener('click', () => {
+  const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  root.dataset.theme = dark ? 'light' : 'dark';
+  try { localStorage.setItem('mr-theme', root.dataset.theme); } catch(e){}
+  drawNet();
+});
+
+/* ---------- data date ---------- */
+const now = new Date();
+const mon = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+$('#dd').textContent = `${String(now.getDate()).padStart(2,'0')}-${mon[now.getMonth()]}-${String(now.getFullYear()).slice(2)}`;
+$('#yr').textContent = now.getFullYear();
+
+/* ---------- marquee duplicate ---------- */
+const mq = $('#mq'); mq.innerHTML += mq.innerHTML;
+
+/* ---------- progress + nav ---------- */
+const bar = $('#progress');
+const links = $$('#navlist a');
+const secs = links.map(a => $(a.getAttribute('href')));
+addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - innerHeight;
+  bar.style.width = (scrollY / h * 100) + '%';
+  let cur = -1;
+  secs.forEach((s,i) => { if (s.getBoundingClientRect().top < innerHeight * .4) cur = i; });
+  links.forEach((a,i) => a.classList.toggle('on', i === cur));
+}, {passive:true});
+
+/* ---------- counters ---------- */
+function count(node){
+  const to = +node.dataset.count, sep = node.hasAttribute('data-sep');
+  const fmt = v => sep ? v.toLocaleString('en-GB') : String(v);
+  if (reduce) { node.textContent = fmt(to); return; }
+  const dur = 1600, t0 = performance.now();
+  const step = t => { const k = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-k,4); node.textContent = fmt(Math.round(to*e)); if (k<1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+
+/* ---------- reveal observer ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  const t = e.target; t.classList.add('in');
+  $$('[data-count]', t).forEach(count);
+  if (t.matches('[data-count]')) count(t);
+  io.unobserve(t);
+}), {threshold:.18, rootMargin:'0px 0px -40px 0px'});
+$$('.reveal').forEach((n,i) => { n.style.transitionDelay = (n.parentElement.children.length > 1 ? ([...n.parentElement.children].indexOf(n) % 5) * 70 : 0) + 'ms'; io.observe(n); });
+
+/* ---------- hero network (activity-on-node, critical path drawn) ---------- */
+const net = $('#net');
+function drawNet(){
+  net.innerHTML = '';
+  const W = net.clientWidth, H = net.clientHeight; if (!W) return;
+  net.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const cs = getComputedStyle(root);
+  const lineC = cs.getPropertyValue('--line').trim(), crit = cs.getPropertyValue('--crit').trim(), ink = cs.getPropertyValue('--muted').trim();
+  const cols = W < 700 ? 5 : 9, rows = 5;
+  let seed = 7; const rnd = () => (seed = (seed*9301+49297)%233280)/233280;
+  const nodes = [];
+  for (let c=0;c<cols;c++) for (let r=0;r<rows;r++){
+    if (rnd() < .35 && !(r===2)) continue;
+    nodes.push({c,r,x: W*(.52 + .46*c/(cols-1)) + (rnd()-.5)*30, y: H*(.12 + .76*r/(rows-1)) + (rnd()-.5)*30});
+  }
+  // only draw on right side on desktop; full width low opacity on mobile
+  if (W < 700) nodes.forEach(n => { n.x = W*(.05 + .9*n.c/(cols-1)); n.y = H*(.08+.3*n.r/(rows-1)); });
+  const byCol = c => nodes.filter(n => n.c === c);
+  const g = el('g', {}, net);
+  const links = [];
+  for (let c=0;c<cols-1;c++){
+    const a = byCol(c), b = byCol(c+1);
+    a.forEach(n => { const tgt = b.sort((p,q)=>Math.abs(p.r-n.r)-Math.abs(q.r-n.r)).slice(0, 1 + (rnd()<.4?1:0)); tgt.forEach(t => links.push([n,t])); });
+  }
+  const path = (a,b) => { const mx = (a.x+b.x)/2; return `M${a.x},${a.y} C${mx},${a.y} ${mx},${b.y} ${b.x},${b.y}`; };
+  links.forEach(([a,b]) => el('path', {d:path(a,b), fill:'none', stroke:lineC, 'stroke-width':1.2}, g));
+  // critical path along r=2 mostly
+  const cp = []; for (let c=0;c<cols;c++){ const col = byCol(c); if (!col.length) continue; cp.push(col.sort((p,q)=>Math.abs(p.r-2)-Math.abs(q.r-2))[0]); }
+  let d = ''; cp.forEach((n,i) => { d += i ? path(cp[i-1], n).replace(/^M[^C]+/, ' ') : `M${n.x},${n.y}`; });
+  const cpath = el('path', {d, fill:'none', stroke:crit, 'stroke-width':2.4, 'stroke-linecap':'round'}, g);
+  nodes.forEach(n => {
+    const on = cp.includes(n);
+    el('rect', {x:n.x-5, y:n.y-5, width:10, height:10, fill: on ? crit : 'none', stroke: on ? crit : ink, 'stroke-width':1.2, transform:`rotate(45 ${n.x} ${n.y})`, opacity: on ? 1 : .6}, g);
+  });
+  if (W >= 700){
+    cp.forEach((n,i) => { if (i%2) return; const t = el('text', {x:n.x+10, y:n.y-10, fill:ink, 'font-family':'JetBrains Mono', 'font-size':10}, g); t.textContent = 'A' + (1000 + i*10); });
+  }
+  const L = cpath.getTotalLength();
+  cpath.style.strokeDasharray = L; cpath.style.strokeDashoffset = reduce ? 0 : L;
+  if (!reduce) requestAnimationFrame(() => { cpath.style.transition = 'stroke-dashoffset 2.6s cubic-bezier(.6,0,.2,1) .4s'; cpath.style.strokeDashoffset = 0; });
+  // travelling pulse
+  if (!reduce){
+    const dot = el('circle', {r:4, fill:crit}, g);
+    const am = el('animateMotion', {dur:'6s', repeatCount:'indefinite', begin:'3s', path:d}, dot);
+  }
+}
+drawNet();
+let rz; addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(drawNet, 150); });
+
+/* ---------- GANTT ---------- */
+const Y0 = 1999.6, Y1 = 2029, WARP = 1.75;
+const ym = (y,m) => y + (m-1)/12;
+const NOW = now.getFullYear() + now.getMonth()/12 + now.getDate()/365;
+const roles = [
+  {id:'A1000', r:'Senior Project Planner', c:'Balfour Beatty', s:ym(2026,8), e:null, crit:true, dates:'Aug 2026 – Present', proj:'Skye Reinforcement OHL & UGC, Scotland', kv:[['£300M+','Programme'],['22,030','Activities reviewed'],['P50–P90','QSRA']],
+   b:['Lead planner for the Skye Reinforcement transmission scheme — overhead line (OHL) and underground cable (UGC) delivery.','Own the Part A (Design) programme in P6; periodic updates of progress, actuals and remaining durations against key client milestones.','Developed and submitted the Part B (Construction) NEC4 ECC Clause 31 tender programme — Completion, Key Dates, float, time risk allowance and H&S requirements.','Implemented QSRA and presented P50 / P80 / P90 outputs for UGC milestones to project and client stakeholders.','Forensic review of the 22,030-activity OHL programme: 18-tab dashboard, 28-page report, 34-action remediation plan.','Maintain integrated logic across design, consents, procurement, enabling works, outage windows and construction; support compensation events with impact analysis.']},
+  {id:'A0900', r:'Senior Planner', c:'M Group Ltd', s:ym(2025,8), e:ym(2026,8), crit:true, dates:'Aug 2025 – Aug 2026', proj:'Overhead Lines Infrastructure Programme, Scotland', kv:[['£300M','Tender programme'],['3','SPEN OHL routes'],['NEC4','Governance']],
+   b:['Led planning and scheduling for major OHL infrastructure works under NEC4-aligned programme governance.','Developed a £300M tender programme and narrative for the ZV EHRE/VERE, LCU2 and XT routes, aligned with SPEN requirements.','Built and controlled integrated multi-level programmes in P6 and MS Project linking engineering, procurement and construction.','Weekly and monthly updates, dashboards, critical path analysis, early warnings and impact assessments for leadership.']},
+  {id:'A0800', r:'Senior Project Controls Engineer', c:'Turner & Townsend', s:ym(2023,6), e:ym(2023,12), dates:'Jun 2023 – Dec 2023', proj:'BP ZERFD Energy Infrastructure Programme', kv:[['~£75M','Programme'],['EVM','Forecasting'],['Won','Award supported']],
+   b:['Developed multi-level schedules and a Basis of Schedule establishing planning standards and controls governance.','Applied Earned Value and variance analysis to improve forecast quality and prompt timely intervention.','Critical path analysis and schedule optimisation to reduce slippage exposure.','Executive reporting packs with visual KPIs; contributed to early-stage planning that supported a successful award.']},
+  {id:'A0700', r:'Senior Project Planner', c:'A.F. Engineering Works, UAE', s:ym(2018,1), e:ym(2023,2), dates:'Jan 2018 – Feb 2023', proj:'High-rise Construction & Infrastructure', kv:[['6','Concurrent projects'],['~£120M','Portfolio'],['3–4 wks','Earlier warning']],
+   b:['Controlled planning for six concurrent high-rise and infrastructure projects — integrated baselines and update cycles.','Standardised planning methods and templates, cutting schedule creation time and improving reporting consistency.','Applied resource levelling to improve workforce utilisation and support efficient site mobilisation.','Weekly schedule health checks surfaced critical issues 3–4 weeks earlier.','Mentored five junior planners — three promoted within 18 months; introduced S-curves, heat maps and milestone trackers.']},
+  {id:'A0600', r:'Sub Postmaster / Director', c:'Peterculter Post Office', s:ym(2014,4), e:ym(2018,1), dates:'Apr 2014 – Jan 2018', proj:'Business ownership', kv:[['£350K','Revenue'],['≤10%','Under budget'],['6','Team led']],
+   b:['Ran a £350K-revenue business and owned a ~£200K budget, delivering up to 10% under budget.','Led a team of six.']},
+  {id:'A0500', r:'Project Planner', c:'Network Rail', s:ym(2011,3), e:ym(2014,4), dates:'Mar 2011 – Apr 2014', proj:'Rail Infrastructure Maintenance & Upgrade', kv:[['~£45M','Programme'],['12+','Stakeholders'],['75+','Changes assessed']],
+   b:['Developed and maintained P6 schedules for rail maintenance and upgrade works, integrating interfaces across 12+ stakeholders.','Assessed schedule impacts of 75+ proposed changes; used what-if analysis to select strategies that avoided delay and cost.']},
+  {id:'A0400', r:'Senior Project Planner', c:'Dynamic Equipment', s:ym(2000,5), e:ym(2011,3), dates:'May 2000 – Mar 2011', proj:'Offshore Oil & Gas — North Sea / Canada', kv:[['11 yrs','Offshore'],['2','Regions'],['Co-wide','Standards adopted']],
+   b:['Planned offshore installation and maintenance programmes, integrating logistics with execution sequencing across multiple work fronts.','Led schedule risk assessments and mitigation for high-risk activities; created planning standards adopted company-wide.']},
+];
+const gb = $('#gbody');
+const pct = y => Math.pow(Math.max(0,(y - Y0) / (Y1 - Y0)), WARP) * 100;
+const years = []; for (let y=2001; y<=2028; y++) years.push(y);
+const mobile = () => innerWidth <= 820;
+function buildGantt(){
+  gb.innerHTML = '';
+  const hn = document.createElement('div'); hn.className = 'g-hname'; hn.textContent = 'Activity'; gb.appendChild(hn);
+  const sc = document.createElement('div'); sc.className = 'g-scale';
+  const ticks = innerWidth < 1100 ? [2005,2011,2016,2020,2023,2026,2028] : [2005,2010,2014,2017,2019,2021,2023,2024,2025,2026,2027,2028];
+  ticks.forEach(y => { const d = document.createElement('span'); d.className='yr'; d.style.left = pct(y)+'%'; d.textContent = "'" + String(y).slice(2); sc.appendChild(d); });
+  const sdl = document.createElement('div'); sdl.className = 'ddline lab'; sdl.style.left = pct(NOW)+'%'; sc.appendChild(sdl);
+  gb.appendChild(sc);
+  roles.forEach((r, i) => {
+    const row = document.createElement('div'); row.className = 'g-row'; row.tabIndex = 0; row.setAttribute('role','button'); row.setAttribute('aria-expanded','false');
+    const end = r.e ?? NOW;
+    const yrs = ((end - r.s)).toFixed(1);
+    row.innerHTML = `<div class="g-cell g-name"><span class="id">${r.id} · ${r.dates}</span><span class="r">${r.r}</span><span class="c">${r.c}</span></div>`;
+    const tr = document.createElement('div'); tr.className = 'g-cell g-track';
+    const grid = document.createElement('div'); grid.className = 'g-grid';
+    years.forEach(y => { if (y < 2014 && y % 3) return; const g = document.createElement('i'); g.style.left = pct(y)+'%'; grid.appendChild(g); });
+    tr.appendChild(grid);
+    const L = pct(r.s), Wd = Math.max(pct(end) - L, .9);
+    const base = document.createElement('div'); base.className='bar base'; base.style.left = L+'%'; base.style.width = Wd+'%'; base.style.transitionDelay = (i*90)+'ms';
+    const b = document.createElement('div'); b.className = 'bar ' + (r.crit ? 'crit' : 'plan') + (L > 55 ? ' flip' : ''); b.style.left = L+'%'; b.style.width = Wd+'%'; b.style.transitionDelay = (i*90+150)+'ms';
+    b.innerHTML = r.e ? `<span class="lbl">${r.c.replace(', UAE','')} · ${yrs < 1 ? Math.round(yrs*12)+' mo' : yrs+' y'}</span>` : '';
+    const ms = document.createElement('i'); ms.className = 'ms'; ms.style.left = (L+Wd)+'%';
+    if (!r.e) { ms.style.background = 'var(--crit)'; }
+    tr.append(base, b, ms);
+    if (!r.e){ const fc = document.createElement('div'); fc.className = 'bar fcst'; fc.style.left = (L+Wd)+'%'; fc.style.width = (pct(Y1-.25) - L - Wd)+'%'; fc.style.transitionDelay = '900ms'; fc.innerHTML = '<span class="lbl">Forecast · Skye delivery →</span>'; tr.appendChild(fc); ms.style.left = pct(Y1-.25)+'%'; ms.classList.add('fin'); }
+    const dl = document.createElement('div'); dl.className='ddline'; dl.style.left = pct(NOW)+'%'; tr.appendChild(dl);
+    row.appendChild(tr);
+    const det = document.createElement('div'); det.className = 'g-detail';
+    det.innerHTML = `<div><div class="inner"><div><p class="mono" style="color:var(--muted);margin-bottom:14px">${r.proj}</p><ul>${r.b.map(x=>`<li>${x}</li>`).join('')}</ul></div><aside>${r.kv.map(([v,k])=>`<div><span class="v">${v}</span><span class="k">${k}</span></div>`).join('')}</aside></div></div>`;
+    const toggle = () => { const o = row.classList.toggle('open'); row.setAttribute('aria-expanded', o); };
+    row.addEventListener('click', toggle);
+    row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    const tip = $('#tip');
+    tr.addEventListener('mousemove', e => { tip.innerHTML = `<b>${r.id}</b> ${r.r}<br>${r.c}<br>${r.dates} · ${r.crit ? 'CRITICAL' : 'COMPLETE'}`; tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + 'px'; tip.style.top = (e.clientY + 16) + 'px'; tip.classList.add('on'); });
+    tr.addEventListener('mouseleave', () => tip.classList.remove('on'));
+    gb.append(row, det);
+  });
+  if (!gb.dataset.init) { gb.dataset.init = 1; roles.length && gb.querySelector('.g-row').classList.add('open'); gb.querySelector('.g-row').setAttribute('aria-expanded','true'); }
+}
+buildGantt();
+let lastW = innerWidth; addEventListener('resize', () => { if ((innerWidth < 1100) !== (lastW < 1100)) { const open = $$('.g-row').map(r=>r.classList.contains('open')); buildGantt(); $$('.g-row').forEach((r,i)=>r.classList.toggle('open', open[i])); } lastW = innerWidth; });
+
+/* ---------- DCMA grid ---------- */
+const checks = [
+ ['Logic','Missing predecessors / successors', 0],['Leads','Negative lags', 1],['Lags','Positive lags', 1],['Rel. types','FS relationships dominate', 1],
+ ['Hard constraints','Mandatory constraints masking float', 0],['High float','Total float > 44 days', 1],['Negative float','Float below zero on milestones', 0],
+ ['High duration','Durations > 44 days', 1],['Invalid dates','Actuals / forecasts vs data date', 1],['Resources','Activities resource-loaded', 1],
+ ['Missed tasks','Baseline finish slippage', 1],['Critical path test','Delay propagates to finish', 1],['CPLI','Critical path length index', 1],['BEI','Baseline execution index', 1]
+];
+const dg = $('#dcma'), lg = $('#dcmaLegend');
+checks.forEach(([n,d,p],i) => {
+  const c = document.createElement('div'); c.textContent = String(i+1).padStart(2,'0'); c.tabIndex = 0;
+  const show = () => lg.innerHTML = `<span><b>${String(i+1).padStart(2,'0')} · ${n}</b> — ${d}</span><span style="color:${p ? '#4fc1b0' : '#ff6a3d'}">${p ? 'PASS' : 'FLAG'}</span>`;
+  c.addEventListener('mouseenter', show); c.addEventListener('focus', show);
+  dg.appendChild(c);
+});
+const resetLg = () => { const f = checks.filter(c=>!c[2]).length; lg.innerHTML = `<span>Hover a check</span><span><b>${14-f}/14 pass · ${f} flagged</b></span>`; };
+dg.addEventListener('mouseleave', resetLg);
+new IntersectionObserver((es, o) => es.forEach(e => {
+  if (!e.isIntersecting) return; o.disconnect();
+  [...dg.children].forEach((c,i) => setTimeout(() => c.classList.add(checks[i][2] ? 'pass' : 'fail'), reduce ? 0 : 120*i));
+  setTimeout(resetLg, reduce ? 0 : 120*14);
+}), {threshold:.4}).observe(dg);
+
+/* ---------- QSRA chart ---------- */
+const sv = $('#qsra');
+const W = 640, H = 360, m = {l:44, r:20, t:24, b:40};
+const iw = W-m.l-m.r, ih = H-m.t-m.b;
+// skewed distribution of finish delay in weeks vs deterministic (0) — lognormal-ish
+const N = 4000; let s2 = 42; const r2 = () => (s2 = (s2*16807) % 2147483647) / 2147483647;
+const samples = [];
+for (let i=0;i<N;i++){ const u1 = r2(), u2 = r2(); const z = Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2); samples.push(Math.exp(2.25 + .42*z) - 4); }
+samples.sort((a,b)=>a-b);
+const xmin = -4, xmax = 36;
+const X = v => m.l + (v - xmin)/(xmax - xmin)*iw, Yp = p => m.t + ih - p*ih;
+const q = p => samples[Math.min(N-1, Math.floor(p*N))];
+const bins = 40, hist = new Array(bins).fill(0);
+samples.forEach(v => { const k = Math.floor((v - xmin)/(xmax-xmin)*bins); if (k>=0 && k<bins) hist[k]++; });
+const hmax = Math.max(...hist);
+// axes
+for (let p=0;p<=1.001;p+=.25){ el('line',{x1:m.l,x2:W-m.r,y1:Yp(p),y2:Yp(p),class:'ax','stroke-dasharray':p?'2 4':''},sv); el('text',{x:m.l-8,y:Yp(p)+3,'text-anchor':'end',class:'axl'},sv).textContent = Math.round(p*100)+'%'; }
+for (let w=0; w<=xmax; w+=8){ el('text',{x:X(w),y:H-m.b+18,'text-anchor':'middle',class:'axl'},sv).textContent = w ? `+${w}w` : 'Det.'; }
+el('text',{x:W-m.r,y:H-6,'text-anchor':'end',class:'axl'},sv).textContent = 'FINISH vs DETERMINISTIC →';
+// deterministic line
+el('line',{x1:X(0),x2:X(0),y1:m.t,y2:Yp(0),stroke:'var(--muted)','stroke-width':1},sv);
+const hg = el('g',{class:'hist'},sv);
+const bw = iw/bins;
+const hrects = hist.map((c,i) => el('rect',{x:m.l+i*bw+1,width:bw-2,y:Yp(0),height:0,rx:1.5},hg));
+// cdf
+let dstr=''; for (let i=0;i<=200;i++){ const v = xmin + (xmax-xmin)*i/200; let lo=0,hi=N; while(lo<hi){const md=(lo+hi)>>1; if(samples[md]<=v) lo=md+1; else hi=md;} dstr += (i?'L':'M') + X(v).toFixed(1)+','+Yp(lo/N).toFixed(1); }
+const cdf = el('path',{d:dstr,class:'cdf'},sv);
+const cl = cdf.getTotalLength(); cdf.style.strokeDasharray = cl; cdf.style.strokeDashoffset = cl;
+// P markers
+const pcol = {50:'var(--plan)',80:'var(--gold)',90:'var(--crit)'};
+const pm = {};
+[50,80,90].forEach(p => {
+  const v = q(p/100), g = el('g',{opacity:0,style:'transition:opacity .6s'},sv);
+  el('line',{x1:X(v),x2:X(v),y1:Yp(p/100),y2:Yp(0),class:'pline',stroke:pcol[p]},g);
+  el('line',{x1:m.l,x2:X(v),y1:Yp(p/100),y2:Yp(p/100),class:'pline',stroke:pcol[p]},g);
+  el('circle',{cx:X(v),cy:Yp(p/100),r:5,fill:pcol[p]},g);
+  const t = el('text',{x:m.l+6,y:Yp(p/100)-6,class:'plbl',fill:pcol[p]},g); t.textContent = `P${p} +${v.toFixed(1)}w`;
+  pm[p] = {g, v};
+});
+// cursor
+const cur = el('g',{class:'cursor',opacity:0},sv);
+const cv = el('line',{y1:m.t,y2:Yp(0)},cur), ch = el('line',{x1:m.l}, cur), cc = el('circle',{r:6},cur);
+const rdDate = $('#rdDate'), rdP = $('#rdP'), rdD = $('#rdD');
+const base = new Date(2029, 2, 30); // illustrative deterministic completion
+const fmtD = w => { const d = new Date(base.getTime() + w*7*864e5); return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); };
+function readAt(v){
+  v = Math.max(xmin, Math.min(xmax, v));
+  let lo=0,hi=N; while(lo<hi){const md=(lo+hi)>>1; if(samples[md]<=v) lo=md+1; else hi=md;}
+  const p = lo/N;
+  cur.setAttribute('opacity',1);
+  cv.setAttribute('x1',X(v)); cv.setAttribute('x2',X(v));
+  ch.setAttribute('x2',X(v)); ch.setAttribute('y1',Yp(p)); ch.setAttribute('y2',Yp(p));
+  cc.setAttribute('cx',X(v)); cc.setAttribute('cy',Yp(p));
+  rdDate.textContent = fmtD(v); rdP.textContent = 'P' + Math.round(p*100); rdD.textContent = (v>=0?'+':'') + v.toFixed(1) + ' weeks';
+}
+const toV = e => { const r = sv.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width * W; return xmin + (x - m.l)/iw*(xmax-xmin); };
+sv.addEventListener('pointermove', e => readAt(toV(e)));
+sv.addEventListener('pointerdown', e => readAt(toV(e)));
+$$('.pcard').forEach(c => {
+  const go = () => { $$('.pcard').forEach(x=>x.classList.toggle('on', x===c)); readAt(pm[c.dataset.p].v); };
+  c.addEventListener('mouseenter', go); c.addEventListener('click', go);
+});
+new IntersectionObserver((es,o) => es.forEach(e => {
+  if (!e.isIntersecting) return; o.disconnect();
+  hrects.forEach((r,i) => { const h = hist[i]/hmax*ih*.55; setTimeout(()=>{ r.style.transition='y .8s cubic-bezier(.2,.8,.1,1), height .8s cubic-bezier(.2,.8,.1,1)'; r.setAttribute('y', Yp(0)-h); r.setAttribute('height', h); }, reduce?0:i*18); });
+  cdf.style.transition = reduce ? 'none' : 'stroke-dashoffset 2s cubic-bezier(.6,0,.2,1) .6s'; cdf.style.strokeDashoffset = 0;
+  [50,80,90].forEach((p,i) => setTimeout(()=>pm[p].g.setAttribute('opacity',1), reduce?0:2200+i*250));
+  setTimeout(() => { readAt(pm[80].v); $('.pcard[data-p="80"]').classList.add('on'); }, reduce?0:3000);
+}), {threshold:.35}).observe(sv);
+
+/* ---------- systems meters ---------- */
+$$('.meter').forEach(mt => { const v = +mt.dataset.v; for (let i=0;i<10;i++){ const x = document.createElement('i'); if (i<v){ x.className='on'; x.style.transitionDelay = (i*60)+'ms'; } mt.appendChild(x);} });
+new IntersectionObserver((es,o)=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); o.disconnect(); } }),{threshold:.3}).observe($('#sys'));
+
+/* ---------- copy email ---------- */
+$('#mail').addEventListener('click', () => { try { navigator.clipboard.writeText('rauf69@gmail.com').then(()=>{ const t=$('#toast'); t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1800); }).catch(()=>{}); } catch(e){} });
+})();
+</script>
+</body>
+</html>
