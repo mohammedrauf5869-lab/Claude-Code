@@ -220,9 +220,24 @@ h2 em{color:var(--crit)}
 .g-detail aside div{display:flex;flex-direction:column}
 .g-detail aside .v{font-family:var(--serif);font-size:30px;line-height:1}
 .g-detail aside .k{font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--muted);letter-spacing:.06em}
-.g-tip{position:fixed;pointer-events:none;z-index:80;background:var(--ink);color:var(--paper);padding:10px 12px;border-radius:8px;font-size:12px;font-family:var(--mono);opacity:0;transform:translateY(6px);transition:opacity .15s,transform .15s;max-width:280px}
-.g-tip.on{opacity:1;transform:none}
-.g-tip b{color:var(--crit);font-weight:500}
+.g-tip{position:fixed;left:0;top:0;pointer-events:none;z-index:80;background:var(--ink);color:var(--paper);padding:16px 18px 18px;border-radius:12px;width:min(420px,calc(100vw - 32px));opacity:0;transition:opacity .15s;box-shadow:0 24px 60px -20px rgba(0,0,0,.55);border-top:3px solid var(--plan)}
+.g-tip.crit{border-top-color:var(--crit)}
+.g-tip.on{opacity:1}
+.g-tip .th{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--paper) 55%,transparent)}
+.g-tip .th b{color:var(--crit);font-weight:500}
+.g-tip.done .th b{color:var(--plan)}
+.g-tip h4{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.05;margin:8px 0 2px}
+.g-tip .co{font-size:13.5px;color:color-mix(in srgb,var(--paper) 80%,transparent)}
+.g-tip .pj{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:color-mix(in srgb,var(--paper) 55%,transparent);margin-top:2px}
+.g-tip .kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;padding:10px 0;border-block:1px dashed color-mix(in srgb,currentColor 22%,transparent)}
+.g-tip .kv span{display:flex;flex-direction:column;font-family:var(--serif);font-size:20px;line-height:1}
+.g-tip .kv i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:color-mix(in srgb,var(--paper) 55%,transparent);margin-top:4px}
+.g-tip ul{list-style:none;display:grid;gap:6px}
+.g-tip li{position:relative;padding-left:16px;font-size:12.5px;line-height:1.45;color:color-mix(in srgb,var(--paper) 88%,transparent)}
+.g-tip li::before{content:"";position:absolute;left:1px;top:.55em;width:5px;height:5px;background:var(--crit);transform:rotate(45deg)}
+:root[data-theme="dark"] .g-tip{background:#ece6d9;color:#141414}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .g-tip{background:#ece6d9;color:#141414}}
+@media (hover:none){.g-tip{display:none}}
 .g-hint{padding:12px 18px;font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 @media (max-width:820px){
   .g-body{grid-template-columns:1fr}
@@ -810,7 +825,15 @@ function buildGantt(){
     row.addEventListener('click', toggle);
     row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
     const tip = $('#tip');
-    tr.addEventListener('mousemove', e => { tip.innerHTML = `<b>${r.id}</b> ${r.r}<br>${r.c}<br>${r.dates} · ${r.crit ? 'CRITICAL' : 'COMPLETE'}`; tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + 'px'; tip.style.top = (e.clientY + 16) + 'px'; tip.classList.add('on'); });
+    const tipHTML = `<div class="th"><span>${r.id} · ${r.dates}</span><b>${r.crit ? 'Critical' : 'Complete'}</b></div><h4>${r.r}</h4><div class="co">${r.c}</div><div class="pj">${r.proj}</div><div class="kv">${r.kv.map(([v,k])=>`<span>${v}<i>${k}</i></span>`).join('')}</div><ul>${r.b.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+    tr.addEventListener('mouseenter', () => { tip.innerHTML = tipHTML; tip.className = 'g-tip on ' + (r.crit ? 'crit' : 'done'); });
+    tr.addEventListener('mousemove', e => {
+      const w = tip.offsetWidth, h = tip.offsetHeight, pad = 16;
+      let x = e.clientX + 18, y = e.clientY + 18;
+      if (x + w > innerWidth - pad) x = e.clientX - w - 18;
+      if (y + h > innerHeight - pad) y = e.clientY - h - 18;
+      tip.style.transform = `translate(${Math.max(pad, x)}px, ${Math.max(pad, Math.min(y, innerHeight - h - pad))}px)`;
+    });
     tr.addEventListener('mouseleave', () => tip.classList.remove('on'));
     gb.append(row, det);
   });
