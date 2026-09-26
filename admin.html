@@ -851,7 +851,7 @@ function renderSections() {
 }
 
 /* ---------- publishing ---------- */
-function ghCfg() { const c = LS.get('mr-admin-gh', {}); return { owner: c.owner || 'mohammedrauf5869-lab', repo: c.repo || 'claude-code', branch: c.branch || 'claude/portfolio-website-cv-140b1f', path: c.path || 'content.js', remember: !!c.remember, token: c.token || SS.get('mr-gh-token') || '' }; }
+function ghCfg() { const c = LS.get('mr-admin-gh', {}); return { owner: c.owner || 'mohammedrauf5869-lab', repo: c.repo || 'Claude-Code', branch: c.branch || 'claude/portfolio-website-cv-140b1f', path: c.path || 'content.js', remember: !!c.remember, token: c.token || SS.get('mr-gh-token') || '' }; }
 function saveCfg(c) { LS.set('mr-admin-gh', { owner:c.owner, repo:c.repo, branch:c.branch, path:c.path, remember:c.remember, token: c.remember ? c.token : undefined }); if (c.remember) SS.del('mr-gh-token'); else { if (c.token) SS.set('mr-gh-token', c.token); else SS.del('mr-gh-token'); } }
 function renderPublishSettings() {
   const c = ghCfg();
