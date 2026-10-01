@@ -7,36 +7,36 @@ window.SITE = {
     "brand": "M. Rauf"
   },
   "theme": {
-    "preset": "blueprint",
+    "preset": "crimson",
     "mode": "auto",
     "light": {
-      "paper": "#eef2f7",
-      "paper2": "#e2e8f0",
-      "card": "#f8fafc",
-      "ink": "#0f1b2d",
-      "ink2": "#334155",
-      "muted": "#64748b",
-      "accent": "#2563eb",
-      "accent2": "#0f766e",
-      "gold": "#d97706",
-      "base": "#b6c2d1"
+      "paper": "#f5f5f4",
+      "paper2": "#e7e5e4",
+      "card": "#fafaf9",
+      "ink": "#0a0a0a",
+      "ink2": "#404040",
+      "muted": "#737373",
+      "accent": "#be123c",
+      "accent2": "#525252",
+      "gold": "#a16207",
+      "base": "#d4d4d4"
     },
     "dark": {
-      "paper": "#0b1220",
-      "paper2": "#111a2e",
-      "card": "#131d33",
-      "ink": "#e2e8f0",
-      "ink2": "#b4c0d3",
-      "muted": "#7c8aa3",
-      "accent": "#60a5fa",
-      "accent2": "#2dd4bf",
-      "gold": "#fbbf24",
-      "base": "#334155"
+      "paper": "#0a0a0a",
+      "paper2": "#141414",
+      "card": "#171717",
+      "ink": "#fafafa",
+      "ink2": "#d4d4d4",
+      "muted": "#8a8a8a",
+      "accent": "#fb7185",
+      "accent2": "#a3a3a3",
+      "gold": "#facc15",
+      "base": "#404040"
     },
     "fonts": {
-      "display": "Instrument Serif",
-      "body": "Inter Tight",
-      "mono": "JetBrains Mono"
+      "display": "Space Grotesk",
+      "body": "Inter",
+      "mono": "DM Mono"
     },
     "radius": 14,
     "grain": true,
