@@ -182,7 +182,7 @@ window.SITE = {
   },
   "programme": {
     "heading": "A career, *baselined.*",
-    "sub": "Rendered the only way a planner would: as a programme. Bars are roles, the orange ones sit on today's critical path. Hover for the full summary, or click any activity to open its detail.",
+    "sub": "Rendered the only way a planner would: as a programme. Bars are roles, the crimson ones sit on today's critical path. Hover for the full summary, or click any activity to open its detail.",
     "chartTitle": "MR-CAREER-L2 · Rev C26",
     "forecastLabel": "Forecast · Skye delivery →",
     "footnote": "Earlier: Mechanical Design Engineer, A.J. Cruickshanks (1997–2000)",
