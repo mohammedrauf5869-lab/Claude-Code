@@ -7,36 +7,36 @@ window.SITE = {
     "brand": "M. Rauf"
   },
   "theme": {
-    "preset": "crimson",
-    "mode": "auto",
+    "preset": "obsidian",
+    "mode": "dark",
     "light": {
-      "paper": "#f5f5f4",
-      "paper2": "#e7e5e4",
-      "card": "#fafaf9",
-      "ink": "#0a0a0a",
-      "ink2": "#404040",
-      "muted": "#737373",
-      "accent": "#be123c",
-      "accent2": "#525252",
-      "gold": "#a16207",
-      "base": "#d4d4d4"
+      "paper": "#F4F3F0",
+      "paper2": "#EAE8E3",
+      "card": "#FFFFFF",
+      "ink": "#0E0F12",
+      "ink2": "#3A3B40",
+      "muted": "#62626A",
+      "accent": "#D62E4A",
+      "accent2": "#4B5BD6",
+      "gold": "#A87A1E",
+      "base": "#CFCCC4"
     },
     "dark": {
-      "paper": "#0a0a0a",
-      "paper2": "#141414",
-      "card": "#171717",
-      "ink": "#fafafa",
-      "ink2": "#d4d4d4",
-      "muted": "#8a8a8a",
-      "accent": "#fb7185",
-      "accent2": "#a3a3a3",
-      "gold": "#facc15",
-      "base": "#404040"
+      "paper": "#0A0B0D",
+      "paper2": "#111215",
+      "card": "#15161A",
+      "ink": "#EDEBE6",
+      "ink2": "#C9C7C1",
+      "muted": "#9A9AA2",
+      "accent": "#FF5A6E",
+      "accent2": "#7C8CFF",
+      "gold": "#E8C07A",
+      "base": "#3A3B40"
     },
     "fonts": {
-      "display": "Space Grotesk",
-      "body": "Inter",
-      "mono": "DM Mono"
+      "display": "Geist",
+      "body": "Geist",
+      "mono": "Geist Mono"
     },
     "radius": 14,
     "grain": true,

@@ -10,6 +10,10 @@ Portfolio site for Mohammed Rauf, Senior Project Planner and Primavera P6 specia
 
 There is no build step. Open `index.html` to view the site, or `admin.html` to edit it.
 
+## Design
+
+The site uses an "Obsidian Glass" look: a near-black page, soft drifting light behind frosted-glass panels, large light-weight Geist type and a single crimson accent. Cards lift and catch a cursor spotlight on hover. Hovering a role in Experience shows its full summary, and clicking pins it. Every colour comes from the theme, so the presets and light mode in the control panel restyle the whole page.
+
 ## Control panel (`admin.html`)
 
 - **Theme & colours:** six colour presets, full light and dark palette editors with contrast checks, font pairings, corner roundness, and toggles for grain, grid and animation.

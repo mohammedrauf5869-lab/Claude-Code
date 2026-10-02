@@ -568,6 +568,7 @@ function relabel() { $$('.item', $('#editor')).forEach(c => c._label && c._label
    THEME HELPERS
    ===================================================================== */
 const PRESETS = {
+  obsidian: { name:'Obsidian Glass', light:{paper:'#F4F3F0',paper2:'#EAE8E3',card:'#FFFFFF',ink:'#0E0F12',ink2:'#3A3B40',muted:'#62626A',accent:'#D62E4A',accent2:'#4B5BD6',gold:'#A87A1E',base:'#CFCCC4'}, dark:{paper:'#0A0B0D',paper2:'#111215',card:'#15161A',ink:'#EDEBE6',ink2:'#C9C7C1',muted:'#9A9AA2',accent:'#FF5A6E',accent2:'#7C8CFF',gold:'#E8C07A',base:'#3A3B40'} },
   signal:   { name:'Signal & Paper', light:{paper:'#f3efe6',paper2:'#ebe5d8',card:'#faf7f0',ink:'#141414',ink2:'#3b3a36',muted:'#7a766c',accent:'#ff4d1f',accent2:'#1f6f66',gold:'#c89b3c',base:'#b9b1a0'}, dark:{paper:'#0e1113',paper2:'#141a1d',card:'#161c1f',ink:'#ece6d9',ink2:'#c3bdb0',muted:'#8a8578',accent:'#ff6a3d',accent2:'#4fc1b0',gold:'#d9b25a',base:'#4a4d4c'} },
   blueprint:{ name:'Blueprint', light:{paper:'#eef2f7',paper2:'#e2e8f0',card:'#f8fafc',ink:'#0f1b2d',ink2:'#334155',muted:'#64748b',accent:'#2563eb',accent2:'#0f766e',gold:'#d97706',base:'#b6c2d1'}, dark:{paper:'#0b1220',paper2:'#111a2e',card:'#131d33',ink:'#e2e8f0',ink2:'#b4c0d3',muted:'#7c8aa3',accent:'#60a5fa',accent2:'#2dd4bf',gold:'#fbbf24',base:'#334155'} },
   forest:   { name:'Forest & Rust', light:{paper:'#f1f0e8',paper2:'#e6e4d8',card:'#faf9f3',ink:'#1b2a1f',ink2:'#3a4a3e',muted:'#6f7a70',accent:'#c2410c',accent2:'#2f6b4f',gold:'#b8860b',base:'#c9c6b4'}, dark:{paper:'#0f1511',paper2:'#151d17',card:'#18221b',ink:'#e7eadf',ink2:'#bfc7b8',muted:'#86917f',accent:'#f97316',accent2:'#6fcf97',gold:'#e0b84f',base:'#3c4a3f'} },
@@ -576,6 +577,7 @@ const PRESETS = {
   midnight: { name:'Midnight Violet', light:{paper:'#f4f3ff',paper2:'#e9e7fb',card:'#fbfaff',ink:'#15122b',ink2:'#3d3960',muted:'#7a7699',accent:'#7c3aed',accent2:'#0891b2',gold:'#d97706',base:'#c9c5e8'}, dark:{paper:'#0b0a16',paper2:'#12101f',card:'#161427',ink:'#ecebff',ink2:'#c1bfe6',muted:'#8683ad',accent:'#a78bfa',accent2:'#22d3ee',gold:'#fbbf24',base:'#34305a'} }
 };
 const PAIRS = {
+  'Glass':     { display:'Geist', body:'Geist', mono:'Geist Mono' },
   'Editorial': { display:'Instrument Serif', body:'Inter Tight', mono:'JetBrains Mono' },
   'Classic':   { display:'Playfair Display', body:'DM Sans', mono:'IBM Plex Mono' },
   'Modern':    { display:'Space Grotesk', body:'Inter', mono:'DM Mono' },
@@ -584,16 +586,16 @@ const PAIRS = {
   'Refined':   { display:'Cormorant Garamond', body:'Plus Jakarta Sans', mono:'JetBrains Mono' }
 };
 const FONTS = {
-  display: ['Instrument Serif','Playfair Display','Fraunces','DM Serif Display','Cormorant Garamond','Libre Baskerville','Space Grotesk','Syne','Bricolage Grotesque'],
-  body: ['Inter Tight','Inter','DM Sans','Manrope','IBM Plex Sans','Work Sans','Outfit','Plus Jakarta Sans'],
-  mono: ['JetBrains Mono','IBM Plex Mono','Space Mono','DM Mono','Fira Code']
+  display: ['Geist','Instrument Serif','Playfair Display','Fraunces','DM Serif Display','Cormorant Garamond','Libre Baskerville','Space Grotesk','Syne','Bricolage Grotesque'],
+  body: ['Geist','Inter Tight','Inter','DM Sans','Manrope','IBM Plex Sans','Work Sans','Outfit','Plus Jakarta Sans'],
+  mono: ['Geist Mono','JetBrains Mono','IBM Plex Mono','Space Mono','DM Mono','Fira Code']
 };
 // load every curated font once so the admin can show samples
 $('#sampleFonts').href = 'https://fonts.googleapis.com/css2?' + [...new Set([...FONTS.display, ...FONTS.body, ...FONTS.mono])].map(f => 'family=' + f.replace(/ /g, '+')).join('&') + '&display=swap';
 
 const COLOR_NAMES = [
   ['paper','Background'], ['paper2','Surface'], ['card','Cards'], ['ink','Text'], ['ink2','Body text'], ['muted','Muted text'],
-  ['accent','Accent (critical)'], ['accent2','Secondary accent'], ['gold','Highlight'], ['base','Baseline bars']
+  ['accent','Accent (critical)'], ['accent2','Glow / secondary'], ['gold','Highlight / glow'], ['base','Baseline bars']
 ];
 const hex2rgb = h => { h = h.replace('#',''); if (h.length === 3) h = h.split('').map(c => c+c).join(''); const n = parseInt(h, 16); return [(n>>16)&255, (n>>8)&255, n&255]; };
 const lum = h => { const [r,g,b] = hex2rgb(h).map(v => { v /= 255; return v <= .03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4); }); return .2126*r + .7152*g + .0722*b; };
@@ -669,8 +671,8 @@ const PANELS = [
       { t:'group', l:'Appearance', fields: [
         { k:'theme.mode', t:'select', l:'Default colour mode', note:'Visitors can still switch', options:[['auto','Match the visitor’s device'],['light','Always start in light'],['dark','Always start in dark']], onChange: v => { if (v !== 'auto') setMode(v); } },
         { k:'theme.radius', t:'range', l:'Corner roundness', min:0, max:28, fmt: v => v + 'px' },
-        { k:'theme.grain', t:'toggle', l:'Paper grain texture', d:'Subtle film grain over the whole page' },
-        { k:'theme.grid', t:'toggle', l:'Schedule grid background', d:'Faint planning-sheet grid behind content' },
+        { k:'theme.grain', t:'toggle', l:'Film grain texture', d:'Very subtle grain over the whole page' },
+        { k:'theme.grid', t:'toggle', l:'Grid background', d:'Faint grid fading out below the hero' },
         { k:'theme.motion', t:'toggle', l:'Animations', d:'Scroll reveals, counters and chart drawing' }
       ]}
   ]},
@@ -682,7 +684,7 @@ const PANELS = [
       { t:'row', fields:[ { k:'hero.tag', l:'Top-left tag' }, { k:'hero.location', l:'Top-right tag' } ] },
       { t:'row', fields:[ { k:'hero.ctaPrimary', l:'Main button', note:'blank hides it' }, { k:'hero.ctaSecondary', l:'Second button' } ] },
       { k:'hero.scrollNote', l:'Scroll line caption' },
-      { k:'hero.showNetwork', t:'toggle', l:'Animated critical-path network', d:'Background graphic behind the name' },
+      { k:'hero.showNetwork', t:'toggle', l:'Ambient glow', d:'Soft drifting light behind the glass panels' },
       { t:'group', l:'Status card', d:'Styled like a P6 activity', fields:[
         { t:'row', fields:[ { k:'hero.cardTitle', l:'Card title' }, { k:'hero.cardStatus', l:'Status' } ] },
         { k:'hero.cardRows', t:'list', l:'Rows', item:[ { t:'row', fields:[ { k:'k', l:'Label', relabel:true }, { k:'v', l:'Value', relabel:true } ] } ], label: it => [it.k, it.v], add:{k:'Label', v:'Value'}, addLabel:'Add row' },
