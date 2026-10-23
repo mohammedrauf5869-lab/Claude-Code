@@ -7,38 +7,38 @@ window.SITE = {
     "brand": "M. Rauf"
   },
   "theme": {
-    "preset": "obsidian",
+    "preset": "blueprint",
     "mode": "dark",
     "light": {
-      "paper": "#F4F3F0",
-      "paper2": "#EAE8E3",
-      "card": "#FFFFFF",
-      "ink": "#0E0F12",
-      "ink2": "#3A3B40",
-      "muted": "#62626A",
-      "accent": "#D62E4A",
-      "accent2": "#4B5BD6",
-      "gold": "#A87A1E",
-      "base": "#CFCCC4"
+      "paper": "#eef2f7",
+      "paper2": "#e2e8f0",
+      "card": "#f8fafc",
+      "ink": "#0f1b2d",
+      "ink2": "#334155",
+      "muted": "#64748b",
+      "accent": "#2563eb",
+      "accent2": "#0f766e",
+      "gold": "#d97706",
+      "base": "#b6c2d1"
     },
     "dark": {
-      "paper": "#0A0B0D",
-      "paper2": "#111215",
-      "card": "#15161A",
-      "ink": "#EDEBE6",
-      "ink2": "#C9C7C1",
-      "muted": "#9A9AA2",
-      "accent": "#FF5A6E",
-      "accent2": "#7C8CFF",
-      "gold": "#E8C07A",
-      "base": "#3A3B40"
+      "paper": "#0b1220",
+      "paper2": "#111a2e",
+      "card": "#131d33",
+      "ink": "#e2e8f0",
+      "ink2": "#b4c0d3",
+      "muted": "#7c8aa3",
+      "accent": "#60a5fa",
+      "accent2": "#2dd4bf",
+      "gold": "#fbbf24",
+      "base": "#334155"
     },
     "fonts": {
-      "display": "Geist",
-      "body": "Geist",
-      "mono": "Geist Mono"
+      "display": "Space Grotesk",
+      "body": "Inter",
+      "mono": "DM Mono"
     },
-    "radius": 14,
+    "radius": 16,
     "grain": true,
     "grid": true,
     "motion": true
@@ -556,7 +556,7 @@ window.SITE = {
     "heading": "Milestones *achieved.*",
     "items": [
       {
-        "text": "NEC4 Clause 31 tender programme for Part B (Construction) of the Skye Reinforcement scheme",
+        "text": "NEC4 Clause 32 programme submissions for Part A (Design) of the Skye Reinforcement scheme",
         "value": "£300M+"
       },
       {
